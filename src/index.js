@@ -1,16 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Greeting extends React.Component {
-  render() {
-    return(<h1>Hello Word</h1>);
-  }
-}
-
-ReactDOM.render(
-  <Greeting />, document.getElementById('root')
-);
-
 class UserData extends React.Component {
   render() {
     return <div>
@@ -27,4 +17,18 @@ class UserData extends React.Component {
 
 ReactDOM.render(
   <UserData />, document.getElementById('userdata')
+);
+
+
+class Calculation extends React.Component {
+  render() {
+    let pi = Math.PI
+    let exponentiation = 3**5
+    return <div>The value of pi is approximately {pi}
+           <h3>{exponentiation}</h3></div>
+  }
+}
+
+ReactDOM.render(
+  <Calculation />, document.getElementById('calculation')
 );
