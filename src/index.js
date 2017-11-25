@@ -7,7 +7,11 @@ import ReactDOM from 'react-dom';
    constructor() {
      super();
      this.state = {
-       showComments: false
+       showComments: false,
+       comments: [
+         {id: 1, author: "Luciano Cesar", body:"We do not have another way to live, just that"},
+         {id: 2, author: "Dodo Cesar", body:"Guess what I have said to my black cat"}
+       ]
      };
    }
 
@@ -23,6 +27,7 @@ import ReactDOM from 'react-dom';
        buttonText = "Hide comments";
      }
      return( <div className="comment-box">
+              <CommentForm addComment={this._addComment.bind(this)}/>
               <h3>Comments</h3>
               <h4 className="comment-count">{numberofcomments}</h4>
               <button onClick = {this._handleClick.bind(this)}>{buttonText}</button>
@@ -31,6 +36,15 @@ import ReactDOM from 'react-dom';
          );
    }
 
+  _addComment(author, body) {
+    const comment = {
+      id: this.state.comments.length + 1,
+      author,
+      body
+    };
+    this.setState({comments: this.state.comments.concat(comment)});
+  }
+
   _handleClick() {
     this.setState({
       showComments: !this.state.showComments
@@ -38,13 +52,7 @@ import ReactDOM from 'react-dom';
   }
 
    _getComments() {
-     const commentList = [
-       {id: 1, author: "Luciano Cesar", body:"We do not have another way to live, just that"},
-       {id: 2, author: "Dodo Cesar", body:"Guess what I have said to my black cat"}
-
-     ];
-
-     return commentList.map((comment) => {
+     return this.state.comments.map((comment) => {
        return (<Comment
                author={comment.author}
                body={comment.body}
@@ -66,6 +74,34 @@ import ReactDOM from 'react-dom';
    }
  }
 
+ class CommentForm extends React.Component {
+   render() {
+     return (
+       <form className="comment-form" onSubmit={this._handleSubmit.bind(this)}>
+         <label>Join the discussion</label>
+         <div className="comment-form-fields">
+           <input placeholder="Name: " ref={(input) => this._author = input}/>
+           <textarea placeholder="Comment: " ref={(textarea) => this._body = textarea}></textarea>
+         </div>
+         <div className="comment-form-actions">
+           <button type="submit">
+             Post comment
+           </button>
+         </div>
+       </form>
+     );
+   }
+
+   _handleSubmit(event) {
+     event.preventDefault();
+
+     let author = this._author;
+     let body = this._body;
+     this.props.addComment(author.value, body.value);
+   }
+ }
+
+
  class Comment extends React.Component {
    render() {
      return(
@@ -79,6 +115,7 @@ import ReactDOM from 'react-dom';
      </div>);
    }
  }
+
 
  ReactDOM.render(
   <CommentBox />, document.getElementById('commentbox')
